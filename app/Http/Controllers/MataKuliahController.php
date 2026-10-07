@@ -32,4 +32,28 @@ class MataKuliahController extends Controller
 
         return redirect()->route('matakuliah.index')->with('success', 'Mata kuliah berhasil ditambahkan.');
     }
+
+    public function edit(MataKuliah $mataKuliah): View
+    {
+        return view('edit_mk', compact('mataKuliah'));
+    }
+
+    public function update(Request $request, MataKuliah $mataKuliah): RedirectResponse
+    {
+        $validated = $request->validate([
+            'nama_mk' => ['required', 'string', 'max:255'],
+            'sks' => ['required', 'integer', 'between:1,100'],
+        ]);
+
+        $mataKuliah->update($validated);
+
+        return redirect()->route('matakuliah.index')->with('success', 'Mata kuliah berhasil diperbarui.');
+    }
+
+    public function destroy(MataKuliah $mataKuliah): RedirectResponse
+    {
+        $mataKuliah->delete();
+
+        return redirect()->route('matakuliah.index')->with('success', 'Mata kuliah berhasil dihapus.');
+    }
 }
